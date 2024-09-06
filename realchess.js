@@ -395,8 +395,8 @@ function loadProblem() {
             hideElement('buttonLoadProblem')
             // TODO now last rows are not used, these have no games
             //const randomRow = Math.floor(Math.random() * rcproblemData.length);
-            //const randomRow = Math.floor(Math.random() * 0.3 * rcproblemData.length);
-            const randomRow = 1620
+            const randomRow = Math.floor(Math.random() * 0.3 * rcproblemData.length);
+            //const randomRow = 1620
 
             const problem = rcproblemData[randomRow];
             console.log("Loaded problem: ", randomRow, " ", problem);
