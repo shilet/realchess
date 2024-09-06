@@ -415,7 +415,7 @@ function loadProblem() {
                 console.log("Related game ", gameId, " ", relatedGame.pgn);
 
                 // todo: gameid 17225 empty PGN
-                // todo: gameid 1 = NO GAME
+                // todo: gameid 1 = NO GAME NOW
                 currentProblem.fillPgn(relatedGame.pgn)
                 currentProblem.fillValues(problem)
                 loadGameOnBoard(relatedGame.pgn)
