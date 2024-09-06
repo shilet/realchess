@@ -1,0 +1,77 @@
+ /* Main container for the board and buttons */
+            #mainContainer {
+                display: flex;
+                flex-direction: column; /* Stack the board and buttons vertically */
+                align-items: center; /* Center align items horizontally */
+                margin-top: 20px;
+            }
+
+            /* Board container */
+            #boardContainer {
+                margin-bottom: 20px; /* Space between the board and buttons */
+            }
+
+            /* Button container */
+            #buttonContainer {
+                display: flex;
+                flex-direction: column; /* Stack button rows vertically */
+                align-items: center; /* Center align buttons horizontally */
+            }
+
+            /* Row of buttons */
+            .row {
+                display: flex;
+                gap: 10px; /* Space between the buttons in the same row */
+                justify-content: center; /* Center buttons within the row */
+                margin-bottom: 10px; /* Space between rows */
+            }
+
+
+            @keyframes fadeBlink {
+                0% { background-color: red; opacity: 0.75; }
+                50% { background-color: red; opacity: 0.5; }
+                100% { background-color: red; opacity: 0.25; }
+            }
+           .fade-blink {
+                animation: fadeBlink 0.5s ease-in-out;
+            }
+
+            @keyframes fadeBlinkGreen {
+                0% { background-color: green; opacity: 0.75; }
+                50% { background-color: green; opacity: 0.5; }
+                100% { background-color: green; opacity: 0.25; }
+            }
+            .fade-blink-green {
+                animation: fadeBlinkGreen 0.5s ease-in-out;
+            }
+            .highlight-white {
+              box-shadow: inset 0 0 3px 3px green;
+            }
+            .highlight-black {
+              box-shadow: inset 0 0 3px 3px purple;
+            }
+            .highlighted {
+             background-color: red;
+            }
+
+            #move-list {
+                margin-top: 20px;
+                line-height: 2;
+                display: block;
+            }
+            .move {
+                cursor: pointer;
+                color: blue;
+                text-decoration: underline;
+                display: inline-block;
+            }
+
+
+           #move-list span {
+                display: inline-block;
+                margin-right: 5px; /* Add some space between moves */
+            }
+
+            .hidden {
+                display: none !important; /* Forcefully hide the element */
+            }

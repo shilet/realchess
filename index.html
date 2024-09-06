@@ -1,0 +1,66 @@
+<!doctype html>
+
+<html>
+    <head>
+        <!-- Recommended meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+
+        <title>RealChess</title>
+
+        <!-- chess scripts -->
+        <link rel="stylesheet" href="./chessboard-1.0.0.min.css">
+        <script src="./jquery-3.7.1.min.js"></script>
+        <script src="./chessboard-1.0.0.min.js"></script>
+        <script src="./chess-0.10.3.min.js"></script>
+        <!--script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script-->
+
+        <!-- own js-->
+        <link rel="stylesheet" href="./realchess.css" />
+
+    </head>
+
+    <body>
+    <h1>RealChess</h1>
+    <div id="mainContainer">
+    <div id="boardContainer">
+        <div id="board" style="width: 400px"></div>
+    </div>
+
+    <div id="buttonContainer">
+        <div class="row">
+            <button id="buttonNext" onclick="buttonPrevMove()">&#8592; <!-- Left arrow --> </button>
+            <button id="buttonPrev" onclick="buttonNextMove()">&#8594; <!-- Right arrow --> </button>
+        </div>
+        <div class="row">
+            <button id = "buttonLoadProblem" onclick="loadProblem()">Load Problem</button>
+            <button id="buttonShowSolution" onclick="showSolution()">Solution</button>
+            <button id="buttonShowGame" onclick="showGame()">Game</button>
+            <select id="mySelect">
+              <option value=0>0</option>
+              <option value=2>2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="max">max</option>
+            </select>
+
+        </div>
+        <div class="row">
+            <button onclick="loadTestProblem()">Test Problem</button>
+        </div>
+        <div class="row">
+            <div id="move-list"></div>
+        </div>
+        <div class="row">
+            <p id="problemDisplay"></p>
+        </div>
+    </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="realchess.js"></script>
+
+    </body>
+
+</html>
