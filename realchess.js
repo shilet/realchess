@@ -384,6 +384,7 @@ function loadProblem() {
     hideElement('problemDisplay')
 
     console.log("LOAD PROBLEM")
+
     //fetch('rc_problem.json')
     //    .then(response => response.json())
     //    .then(data => {
