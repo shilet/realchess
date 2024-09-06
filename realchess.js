@@ -383,7 +383,7 @@ function loadProblem() {
     hideElement('mySelect')
     hideElement('problemDisplay')
 
-    console.log("LOAD PROBLEM")
+    console.log("LOAD PROBLEM NOW")
 
     //fetch('rc_problem.json')
     //    .then(response => response.json())
