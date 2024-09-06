@@ -323,7 +323,9 @@ function executeMovesUpTo(moves, moveIndex)
 
 function executeMove(movefrom, moveto)
 {
+   console.log("Execute move from ", movefrom, " to ", moveto)
    removeHighlights()
+
    var move = myboardgame.move({from: movefrom, to: moveto, promotion: 'q'})
    //move = myboardgame.move(movefrom, moveto)
    $board.find('.square-' + movefrom).addClass('highlight-black')
@@ -381,9 +383,10 @@ function loadProblem() {
     hideElement('mySelect')
     hideElement('problemDisplay')
 
-    fetch('rc_problem.json')
-        .then(response => response.json())
-        .then(data => {
+    console.log("LOAD PROBLEM")
+    //fetch('rc_problem.json')
+    //    .then(response => response.json())
+    //    .then(data => {
             // Get a random problem from the array
             clearBoard()
             showElement('buttonShowSolution')
@@ -391,8 +394,8 @@ function loadProblem() {
             hideElement('buttonLoadProblem')
             // TODO now last rows are not used, these have no games
             //const randomRow = Math.floor(Math.random() * rcproblemData.length);
-            const randomRow = Math.floor(Math.random() * 0.4 * rcproblemData.length);
-            //const randomRow = 23008
+            //const randomRow = Math.floor(Math.random() * 0.3 * rcproblemData.length);
+            const randomRow = 1620
 
             const problem = rcproblemData[randomRow];
             console.log("Loaded problem: ", randomRow, " ", problem);
@@ -400,72 +403,79 @@ function loadProblem() {
             // document.getElementById('problemDisplay').textContent = `FEN: ${problem.fento}, Solution: ${problem.var1_0}`;
 
             const gameId = problem.gameid;
-            const relatedGame = gameData.find(row => row.id === gameId);
-            console.log("Related game ", gameId, " ", relatedGame.pgn);
+            if (gameId == 1)
+            {
+                loadProblem()
 
-            // todo: gameid 17225 empty PGN
-            // todo: gameid 1 = NO GAME
-            currentProblem.fillPgn(relatedGame.pgn)
-            currentProblem.fillValues(problem)
-            loadGameOnBoard(relatedGame.pgn)
-
-            // NB lists start at 0, so move 3 = move 2 black
-            /* startmove is the move that should be done to solve the problem */
-            if (currentProblem.sideToMove == 'b'){
-                myboard.orientation('black');
-                currentProblem.startMove = (currentProblem.halfMove) * 2 - 1
             }
             else
             {
-                myboard.orientation('white')
-                currentProblem.startMove = (currentProblem.halfMove ) * 2 - 1
-            }
+                const relatedGame = gameData.find(row => row.id === gameId);
+                console.log("Related game ", gameId, " ", relatedGame.pgn);
 
-             // execute moves for game
-            mygame.reset();
-            moves = currentProblem.moves
-            for (var i = 0; i < currentProblem.startMove; i++) {
-                mygame.move(moves[i]);
-            }
-            console.log("MyGame: ", mygame.fen(), " ", mygame.turn() )
+                // todo: gameid 17225 empty PGN
+                // todo: gameid 1 = NO GAME
+                currentProblem.fillPgn(relatedGame.pgn)
+                currentProblem.fillValues(problem)
+                loadGameOnBoard(relatedGame.pgn)
+
+                // NB lists start at 0, so move 3 = move 2 black
+                /* startmove is the move that should be done to solve the problem */
+                if (currentProblem.sideToMove == 'b'){
+                    myboard.orientation('black');
+                    currentProblem.startMove = (currentProblem.halfMove) * 2 - 1
+                }
+                else
+                {
+                    myboard.orientation('white')
+                    currentProblem.startMove = (currentProblem.halfMove ) * 2 - 1
+                }
+
+                 // execute moves for game
+                mygame.reset();
+                moves = currentProblem.moves
+                for (var i = 0; i < currentProblem.startMove; i++) {
+                    mygame.move(moves[i]);
+                }
+                console.log("MyGame: ", mygame.fen(), " ", mygame.turn() )
 
 
-            // blindmoves
-            maxblindmoves = currentProblem.startMove
-            if (selectedBlindMoves == -1)
-            {
-               nblindmoves = maxblindmoves
-            }
-            else if (selectedBlindMoves > maxblindmoves)
-            {
-                nblindmoves = maxblindmoves
+                // blindmoves
+                maxblindmoves = currentProblem.startMove
+                if (selectedBlindMoves == -1)
+                {
+                   nblindmoves = maxblindmoves
+                }
+                else if (selectedBlindMoves > maxblindmoves)
+                {
+                    nblindmoves = maxblindmoves
+                 }
+                else
+                {
+                    nblindmoves = selectedBlindMoves
+                }
+                console.log("nblindmoves ", nblindmoves)
+                currentmove = currentProblem.startMove - nblindmoves
+
+                 // execute moves for boardgame (blindgame)
+                myboardgame.reset();  // Reset the game to the starting position
+                moves = currentProblem.moves
+                for (var i = 0; i < currentmove; i++) {
+                    myboardgame.move(moves[i]);
+                }
+                fen = myboardgame.fen()
+                currentProblem.fenfrom = fen
+                myboard.position(fen);
+                console.log("MyBoardGame: ", myboardgame.fen(), " ", myboardgame.turn() )
+
+                currentProblem.currentMove = currentmove;
+                modeSolveProblem = true
+                console.log("Current problem solution", currentProblem.solution)
+              //  hideMovesAndNumbers(5, 8)
+                 showMoves(currentmove, currentmove+nblindmoves)
+            //})
+            //.catch(error => console.error('Error loading random problem:', error));
              }
-            else
-            {
-                nblindmoves = selectedBlindMoves
-            }
-            console.log("nblindmoves ", nblindmoves)
-            currentmove = currentProblem.startMove - nblindmoves
-
-             // execute moves for boardgame (blindgame)
-            myboardgame.reset();  // Reset the game to the starting position
-            moves = currentProblem.moves
-            for (var i = 0; i < currentmove; i++) {
-                myboardgame.move(moves[i]);
-            }
-            fen = myboardgame.fen()
-            currentProblem.fenfrom = fen
-            myboard.position(fen);
-            console.log("MyBoardGame: ", myboardgame.fen(), " ", myboardgame.turn() )
-
-            currentProblem.currentMove = currentmove;
-            modeSolveProblem = true
-            console.log("Current problem solution", currentProblem.solution)
-          //  hideMovesAndNumbers(5, 8)
-             showMoves(currentmove, currentmove+nblindmoves)
-        })
-        .catch(error => console.error('Error loading random problem:', error));
-
 }
 
 // Load Test Problem
@@ -528,7 +538,7 @@ function showSolution()
    document.getElementById('problemDisplay').textContent = solutionString;
 
    //showMoves(0, currentProblem.nmoves)
-   moveindex = currentProblem.startMove// show the move of the problem
+   moveindex = currentProblem.startMove - 1// show the move of the problem
    executeMovesUpTo(currentProblem.moves, moveindex)
 
    var moveElement = document.querySelector(`.move[data-move-index="${moveindex}"]`);
@@ -536,6 +546,7 @@ function showSolution()
    //if (moveElement) {
    //     moveElement.click(); // Programmatically trigger the click event
    // }
+   console.log("Show solution ", solutionString)
    movefrom = solutionString.slice(0,2)
    moveto = solutionString.slice(2,4)
    executeMove(movefrom, moveto)
@@ -554,16 +565,16 @@ function showGame()
    var solutionString = currentProblem.solution[0]
    document.getElementById('problemDisplay').textContent = ``;
    showMoves(0, currentProblem.nmoves)
-   moveindex = currentProblem.startMove// show the move of the problem
+   moveindex = currentProblem.startMove - 1// show the move of the problem
    var moveElement = document.querySelector(`.move[data-move-index="${moveindex}"]`);
    console.log("moveElement ", moveElement)
    if (moveElement) {
         moveElement.click(); // Programmatically trigger the click event
    }
-
-   movefrom = solutionString.slice(0,2)
-   moveto = solutionString.slice(2,4)
-   executeMove(movefrom, moveto)
+   removeHighlights()
+   //movefrom = solutionString.slice(0,2)
+   //moveto = solutionString.slice(2,4)
+   //executeMove(movefrom, moveto)
 
 
  }
